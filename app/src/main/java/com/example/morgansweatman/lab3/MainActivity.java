@@ -17,12 +17,49 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList secretWords = new ArrayList(Arrays.asList("APPLE", "BANANA", "CHERRY"));
+    private ArrayList secretWords = new ArrayList(Arrays.asList("APPLE", "BANANA", "CHERRY"));
+    private String word;
     private Random rand = new Random();
 
-    // set one of your random words from secretWords to word
-    int random = rand.nextInt(secretWords.size());
-    String word = (String) secretWords.get(random);
+    private TextView t;
+    private TextView c;
+    private EditText e;
+
+    private int index;
+    private StringBuilder sb;
+
+    private String getShuffledWord() {
+        // set one of your random words from secretWords to word
+        int random = rand.nextInt(secretWords.size());
+        word = (String) secretWords.get(random);
+
+        String shuffledWord = "";
+        ArrayList<String> splitWord = new ArrayList(Arrays.asList(word.split("")));
+        Collections.shuffle(splitWord);
+        for (String c : splitWord) {
+            shuffledWord += c;
+        }
+        return shuffledWord;
+    }
+
+    public void guessButtonClicked(View v) {
+        String guess = e.getText().toString();
+        guess = guess.toUpperCase();
+
+        if(guess.charAt(0) == (word.charAt(index))){
+            sb.append(guess);
+        }
+        else {
+            c.setText("Incorrect guess!");
+        }
+        c.setText(sb.toString());
+        e.setText("");
+        index++;
+
+        if(sb.length() == word.length()){
+            c.setText("You correctly guessed the word!");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,40 +78,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // display scrambled word to the user
-        String s = getScrambledWord();
-        TextView t = (TextView) findViewById(R.id.scrambledWordLabel);
+        e = (EditText) findViewById(R.id.playerGuess);
+        c = (TextView) findViewById(R.id.correctGuesses);
+        sb = new StringBuilder();
+        index = 0;
+
+        // set scrambled word TextView to a random scrambled word onCreate
+        String s = getShuffledWord();
+        t = (TextView) findViewById(R.id.scrambledWordLabel);
         t.setText(s);
-    }
-
-    public void guessButtonClicked(View v) {
-        EditText e = (EditText) findViewById(R.id.playerGuess);
-        TextView t = (TextView) findViewById(R.id.correctGuesses);
-        int index = 0;
-        StringBuilder sb = new StringBuilder();
-
-        String guess = e.getText().toString();
-        guess = guess.toUpperCase();
-
-        if(guess.charAt(0) == (word.charAt(index))){
-            sb.append(guess);
-            index++;
-        }
-        else {
-            t.setText("Incorrect guess!");
-        }
-
-        t.setText(sb.toString());
-        e.setText("");
-    }
-
-    private String getScrambledWord() {
-        String shuffledWord = "";
-        ArrayList<String> splitWord = new ArrayList(Arrays.asList(word.split("")));
-        Collections.shuffle(splitWord);
-        for (String c : splitWord) {
-            shuffledWord += c;
-        }
-        return shuffledWord;
     }
 
     @Override
