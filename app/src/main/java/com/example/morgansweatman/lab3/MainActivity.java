@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
         if(guess.charAt(0) == (word.charAt(index))){
             sb.append(guess);
         }
-        else {
-            c.setText("Incorrect guess!");
-        }
         c.setText(sb.toString());
         e.setText("");
         index++;
