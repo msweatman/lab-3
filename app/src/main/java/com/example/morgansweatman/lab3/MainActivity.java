@@ -24,16 +24,6 @@ public class MainActivity extends AppCompatActivity {
     int random = rand.nextInt(secretWords.size());
     String word = (String) secretWords.get(random);
 
-    private String getScrambledWord() {
-        String shuffledWord = "";
-        ArrayList<String> splitWord = new ArrayList(Arrays.asList(word.split("")));
-        Collections.shuffle(splitWord);
-        for (String c : splitWord) {
-            shuffledWord += c;
-        }
-        return shuffledWord;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(guess.charAt(0) == (word.charAt(index))){
             sb.append(guess);
+            index++;
         }
         else {
             t.setText("Incorrect guess!");
@@ -74,7 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
         t.setText(sb.toString());
         e.setText("");
-        index++;
+    }
+
+    private String getScrambledWord() {
+        String shuffledWord = "";
+        ArrayList<String> splitWord = new ArrayList(Arrays.asList(word.split("")));
+        Collections.shuffle(splitWord);
+        for (String c : splitWord) {
+            shuffledWord += c;
+        }
+        return shuffledWord;
     }
 
     @Override
